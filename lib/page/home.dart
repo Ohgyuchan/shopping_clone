@@ -11,80 +11,83 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Map<String, String>> data = [];
+  late int _currentPageIndex;
 
   @override
   void initState() {
     super.initState();
+
+    _currentPageIndex = 0;
 
     data = [
       {
         "image": "assets/images/ara-1.jpg",
         "title": "네메시스 축구화275",
         "location": "팡주팡역시 서구 화정동",
-        "price": "30,000",
+        "price": "30000",
         "likes": "2"
       },
       {
         "image": "assets/images/ara-2.jpg",
         "title": "LA갈비 5kg팔아요~",
         "location": "팡주팡역시 서구 풍암동",
-        "price": "100,000",
+        "price": "100000",
         "likes": "5"
       },
       {
         "image": "assets/images/ara-3.jpg",
         "title": "치약팝니다",
         "location": "팡주팡역시 서구 봉선동",
-        "price": "5,000",
+        "price": "5000",
         "likes": "0"
       },
       {
         "image": "assets/images/ara-4.jpg",
         "title": "[풀박스]맥북프로16인치 터치바 스페이스그레이 256GB",
         "location": "팡주팡역시 서구 임암동",
-        "price": "2,500,000",
+        "price": "2500000",
         "likes": "6"
       },
       {
         "image": "assets/images/ara-5.jpg",
         "title": "디월트존기임팩",
         "location": "팡주팡역시 광산구 신촌동",
-        "price": "150,000",
+        "price": "150000",
         "likes": "2"
       },
       {
         "image": "assets/images/ara-6.jpg",
         "title": "갤럭시s10",
         "location": "팡주팡역시 서구 화정동",
-        "price": "180,000",
+        "price": "180000",
         "likes": "2"
       },
       {
         "image": "assets/images/ara-7.jpg",
         "title": "선반",
         "location": "팡주팡역시 서구 화정동",
-        "price": "15,000",
+        "price": "15000",
         "likes": "2"
       },
       {
         "image": "assets/images/ara-8.jpg",
         "title": "냉장 쇼케이스",
         "location": "팡주팡역시 북구 용봉동",
-        "price": "80,000",
+        "price": "80000",
         "likes": "3"
       },
       {
         "image": "assets/images/ara-9.jpg",
         "title": "대우 미니냉장고",
         "location": "팡주팡역시 서구 화정동",
-        "price": "30,000",
+        "price": "30000",
         "likes": "3"
       },
       {
         "image": "assets/images/ara-10.jpg",
         "title": "멜킨스 풀업 턱걸이 판매합니다.",
         "location": "팡주팡역시 서구 풍암동",
-        "price": "50,000",
+        "price": "50000",
         "likes": "7"
       },
     ];
@@ -170,7 +173,7 @@ class _HomeState extends State<Home> {
                         height: 5,
                       ),
                       Text(
-                        "${data[index]["price"]} 원",
+                        calcStringToWon(data[index]["price"].toString()),
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
                       Expanded(
@@ -208,11 +211,45 @@ class _HomeState extends State<Home> {
     );
   }
 
+  BottomNavigationBarItem _bottomNavigationBarItem(String iconName, String label) {
+    return BottomNavigationBarItem(
+      icon: SvgPicture.asset(
+        "assets/svg/${iconName}_off.svg",
+        width: 22,
+      ),
+      label: label,
+    );
+  }
+
+  Widget _bottomNavigationBarWidget() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      onTap: (int index) {
+        print(index);
+        setState(() {
+          _currentPageIndex = index;
+        });
+      },
+      currentIndex: _currentPageIndex,
+      selectedFontSize: 12,
+      selectedItemColor: Colors.black,
+      selectedLabelStyle: TextStyle(color: Colors.black),
+      items: [
+        _bottomNavigationBarItem("home", "홈"),
+        _bottomNavigationBarItem("notes", "동네 생활"),
+        _bottomNavigationBarItem("location", "내 근처"),
+        _bottomNavigationBarItem("chat", "채팅"),
+        _bottomNavigationBarItem("user", "나의 당근"),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBarWidget(),
       body: bodyWidget(),
+      bottomNavigationBar: _bottomNavigationBarWidget(),
     );
   }
 }
