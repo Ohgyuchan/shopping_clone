@@ -15,6 +15,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     data = [
       {
         "image": "assets/images/ara-1.jpg",
@@ -98,13 +99,41 @@ class _HomeState extends State<Home> {
         onLongPress: () {
           print('long pressed');
         },
-        child: Row(
-          children: [
-            Text(
-              '아라동',
-            ),
-            Icon(Icons.arrow_drop_down)
-          ],
+        child: PopupMenuButton<String>(
+          offset: Offset(0, 30),
+          shape: ShapeBorder.lerp(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              1),
+          onSelected: (String where) {
+            print(where);
+          },
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                value: "ara",
+                child: Text('아라동'),
+              ),
+              PopupMenuDivider(height: 1.0,),
+              PopupMenuItem(
+                value: "ora",
+                child: Text('오라동'),
+              ),
+              PopupMenuDivider(height: 1.0,),
+              PopupMenuItem(
+                value: "donam",
+                child: Text('도남동'),
+              ),
+            ];
+          },
+          child: Row(
+            children: [
+              Text(
+                '아라동',
+              ),
+              Icon(Icons.arrow_drop_down)
+            ],
+          ),
         ),
       ),
       elevation: 1,
