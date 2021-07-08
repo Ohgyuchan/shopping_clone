@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_clone/page/home.dart';
+import 'package:shopping_clone/page/app.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      home: App(),
     );
   }
 }

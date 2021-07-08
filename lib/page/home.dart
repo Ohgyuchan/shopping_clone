@@ -11,14 +11,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Map<String, String>> data = [];
-  late int _currentPageIndex;
 
   @override
   void initState() {
     super.initState();
-
-    _currentPageIndex = 0;
-
     data = [
       {
         "image": "assets/images/ara-1.jpg",
@@ -130,7 +126,7 @@ class _HomeState extends State<Home> {
     return "${oCcy.format(int.parse(priceString))} 원";
   }
 
-  Widget bodyWidget() {
+  Widget _bodyWidget() {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       itemBuilder: (BuildContext _context, int index) {
@@ -211,45 +207,11 @@ class _HomeState extends State<Home> {
     );
   }
 
-  BottomNavigationBarItem _bottomNavigationBarItem(String iconName, String label) {
-    return BottomNavigationBarItem(
-      icon: SvgPicture.asset(
-        "assets/svg/${iconName}_off.svg",
-        width: 22,
-      ),
-      label: label,
-    );
-  }
-
-  Widget _bottomNavigationBarWidget() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      onTap: (int index) {
-        print(index);
-        setState(() {
-          _currentPageIndex = index;
-        });
-      },
-      currentIndex: _currentPageIndex,
-      selectedFontSize: 12,
-      selectedItemColor: Colors.black,
-      selectedLabelStyle: TextStyle(color: Colors.black),
-      items: [
-        _bottomNavigationBarItem("home", "홈"),
-        _bottomNavigationBarItem("notes", "동네 생활"),
-        _bottomNavigationBarItem("location", "내 근처"),
-        _bottomNavigationBarItem("chat", "채팅"),
-        _bottomNavigationBarItem("user", "나의 당근"),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBarWidget(),
-      body: bodyWidget(),
-      bottomNavigationBar: _bottomNavigationBarWidget(),
+      body: _bodyWidget(),
     );
   }
 }
