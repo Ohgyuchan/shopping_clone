@@ -149,9 +149,11 @@ class ContentsRepository {
   Future<List<Map<String, String>>> loadContentsFromLocation(
       String location) async {
     await Future.delayed(
-      Duration(milliseconds: 0),
+      Duration(milliseconds: 500),
     );
-    // throw Exception();
+    if (data[location] == null) {
+      throw Exception("Data is Null");
+    }
     return data[location];
   }
 }
