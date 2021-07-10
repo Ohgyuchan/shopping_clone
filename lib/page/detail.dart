@@ -13,11 +13,34 @@ class DetailContentsView extends StatefulWidget {
   _DetailContentsViewState createState() => _DetailContentsViewState();
 }
 
-class _DetailContentsViewState extends State<DetailContentsView> {
+class _DetailContentsViewState extends State<DetailContentsView>
+    with SingleTickerProviderStateMixin {
   late Size size;
   List<String> imgList = [];
   late int _currentIndex;
+  double scrollPositionToAlpha = 0;
   ScrollController _appBarScrollController = ScrollController();
+  late AnimationController _appBarAnimationController;
+  late Animation _colorTween;
+
+  @override
+  void initState() {
+    _appBarAnimationController = AnimationController(vsync: this);
+    _colorTween = ColorTween(
+      begin: Colors.white,
+      end: Colors.black,
+    ).animate(_appBarAnimationController);
+    _appBarScrollController.addListener(() {
+      setState(() {
+        if (_appBarScrollController.offset > 255)
+          scrollPositionToAlpha = 255;
+        else
+          scrollPositionToAlpha = _appBarScrollController.offset;
+        _appBarAnimationController.value = scrollPositionToAlpha / 255;
+      });
+    });
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -109,33 +132,34 @@ class _DetailContentsViewState extends State<DetailContentsView> {
     );
   }
 
+  Widget _makeAnimatedIcon(IconData iconData) {
+    return AnimatedBuilder(
+      animation: _colorTween,
+      builder: (context, child) => Icon(
+        iconData,
+        color: _colorTween.value,
+      ),
+    );
+  }
+
   AppBar _appBarWidget() {
     return AppBar(
-      backgroundColor: Colors.white.withAlpha(0),
+      backgroundColor: Colors.white.withAlpha(scrollPositionToAlpha.toInt()),
       elevation: 0,
       leading: IconButton(
         onPressed: () {
           Get.back();
         },
-        icon: Icon(
-          Icons.arrow_back,
-          color: Colors.white,
-        ),
+        icon: _makeAnimatedIcon(Icons.arrow_back),
       ),
       actions: [
         IconButton(
           onPressed: () {},
-          icon: Icon(
-            Icons.share_outlined,
-            color: Colors.white,
-          ),
+          icon: _makeAnimatedIcon(Icons.share_outlined),
         ),
         IconButton(
           onPressed: () {},
-          icon: Icon(
-            Icons.more_vert,
-            color: Colors.white,
-          ),
+          icon: _makeAnimatedIcon(Icons.more_vert),
         ),
       ],
     );
