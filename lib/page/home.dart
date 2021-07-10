@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shopping_clone/page/detail.dart';
 import 'package:shopping_clone/repository/contents_repository.dart';
+import 'package:shopping_clone/utils/data_utils.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -109,12 +109,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  final oCcy = new NumberFormat("#,###", "ko_KR");
-  String calcStringToWon(String priceString) {
-    if (priceString == '무료나눔') return priceString;
-    return "${oCcy.format(int.parse(priceString))}원";
-  }
-
   _loadContents() {
     return contentsRepository.loadContentsFromLocation(currentLocation);
   }
@@ -184,9 +178,7 @@ class _HomeState extends State<Home> {
                           style: TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
+                        SizedBox(height: 5),
                         Text(
                           "${data[index]["location"]}",
                           style: TextStyle(
@@ -194,11 +186,10 @@ class _HomeState extends State<Home> {
                             color: Colors.black.withOpacity(0.3),
                           ),
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
+                        SizedBox(height: 5),
                         Text(
-                          calcStringToWon(data[index]["price"].toString()),
+                          DataUtils.calcStringToWon(
+                              data[index]["price"].toString()),
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                         Expanded(
@@ -211,9 +202,7 @@ class _HomeState extends State<Home> {
                                 height: 13,
                                 width: 13,
                               ),
-                              SizedBox(
-                                width: 5,
-                              ),
+                              SizedBox(width: 5),
                               Text("${data[index]["likes"]}"),
                             ],
                           ),
