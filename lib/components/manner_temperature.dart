@@ -71,7 +71,7 @@ class MannerTemperature extends StatelessWidget {
     return Container(
       width: 30,
       height: 30,
-      child: Image.asset("assets/images/level-${level}.jpg"),
+      child: Image.asset("assets/images/level-$level.jpg"),
     );
   }
 

@@ -7,8 +7,22 @@ import 'package:shopping_clone/repository/contents_repository.dart';
 import 'package:shopping_clone/utils/data_utils.dart';
 
 class DetailContentsView extends StatefulWidget {
-  final Map<String, String> data;
-  const DetailContentsView({Key? key, required this.data}) : super(key: key);
+  final String cid;
+  final String image;
+  final String title;
+  final String location;
+  final String price;
+  final String likes;
+
+  const DetailContentsView(
+      {Key? key,
+      required this.cid,
+      required this.image,
+      required this.title,
+      required this.location,
+      required this.price,
+      required this.likes})
+      : super(key: key);
 
   @override
   _DetailContentsViewState createState() => _DetailContentsViewState();
@@ -16,6 +30,7 @@ class DetailContentsView extends StatefulWidget {
 
 class _DetailContentsViewState extends State<DetailContentsView>
     with SingleTickerProviderStateMixin {
+  late Map<String, String> data;
   late ContentsRepository contentsRepository;
   late Size size;
   List<String> imgList = [];
@@ -28,6 +43,14 @@ class _DetailContentsViewState extends State<DetailContentsView>
 
   @override
   void initState() {
+    data = {
+      "cid": widget.cid,
+      "image": widget.image,
+      "title": widget.title,
+      "location": widget.location,
+      "price": widget.price,
+      "likes": widget.likes
+    };
     _isMyFavoriteContent = false;
     _appBarAnimationController = AnimationController(vsync: this);
     _colorTween = ColorTween(
@@ -50,7 +73,7 @@ class _DetailContentsViewState extends State<DetailContentsView>
 
   _loadMyFavoriteContentState() async {
     bool checkIsMyFavorite =
-        await contentsRepository.isMyFavoriteContents("${widget.data["cid"]}");
+        await contentsRepository.isMyFavoriteContents("${data['cid']}");
     setState(() {
       _isMyFavoriteContent = checkIsMyFavorite;
     });
@@ -61,10 +84,10 @@ class _DetailContentsViewState extends State<DetailContentsView>
     super.didChangeDependencies();
     size = MediaQuery.of(context).size;
     imgList = [
-      "${widget.data['image']}",
-      "${widget.data['image']}",
-      "${widget.data['image']}",
-      "${widget.data['image']}",
+      "${data['image']}",
+      "${data['image']}",
+      "${data['image']}",
+      "${data['image']}",
     ];
     _currentIndex = 0;
   }
@@ -90,8 +113,8 @@ class _DetailContentsViewState extends State<DetailContentsView>
             onTap: () async {
               _isMyFavoriteContent
                   ? await contentsRepository
-                      .deleteMyFavoriteContent("${widget.data['cid']}")
-                  : await contentsRepository.addMyFavoriteContent(widget.data);
+                      .deleteMyFavoriteContent("${data['cid']}")
+                  : await contentsRepository.addMyFavoriteContent(data);
               setState(() {
                 _isMyFavoriteContent = !_isMyFavoriteContent;
               });
@@ -121,7 +144,7 @@ class _DetailContentsViewState extends State<DetailContentsView>
           Column(
             children: [
               Text(
-                DataUtils.calcStringToWon("${widget.data["price"]}"),
+                DataUtils.calcStringToWon("${data["price"]}"),
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -255,7 +278,7 @@ class _DetailContentsViewState extends State<DetailContentsView>
       child: Stack(
         children: [
           Hero(
-            tag: "${widget.data['cid']}",
+            tag: "${data['cid']}",
             // Hero애니메이션 도중에 발생하는 오버플로우 때문에 애니매이션 동작 재정의
             flightShuttleBuilder: (
               BuildContext flightContext,
@@ -358,7 +381,7 @@ class _DetailContentsViewState extends State<DetailContentsView>
         children: [
           SizedBox(height: 20.0),
           Text(
-            "${widget.data["title"]}",
+            "${data["title"]}",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,

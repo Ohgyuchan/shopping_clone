@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Center(
-            child: CupertinoActivityIndicator(),
+            child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
           if (snapshot.error.toString() == "Exception: Data is Null") {
@@ -154,7 +154,13 @@ class _HomeState extends State<Home> {
       itemBuilder: (BuildContext _context, int index) {
         return GestureDetector(
           onTap: () {
-            Get.to(() => DetailContentsView(data: data[index]));
+            Get.to(() => DetailContentsView(
+                cid: "${data[index]['cid']}",
+                image: "${data[index]['image']}",
+                title: "${data[index]['title']}",
+                location: "${data[index]['location']}",
+                price: "${data[index]['price']}",
+                likes: "${data[index]['likes']}"));
             print(data[index]['title']);
           },
           child: Container(
@@ -229,7 +235,7 @@ class _HomeState extends State<Home> {
           color: Colors.black.withOpacity(0.4),
         );
       },
-      itemCount: 10,
+      itemCount: data.length,
     );
   }
 }
