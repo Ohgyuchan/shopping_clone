@@ -79,6 +79,15 @@ class _DetailContentsViewState extends State<DetailContentsView>
               setState(() {
                 isMyFavoriteContent = !isMyFavoriteContent;
               });
+              Get.showSnackbar(
+                GetBar(
+                  message: isMyFavoriteContent
+                      ? '관심상품 목록에 추가됐습니다.'
+                      : '관심상품 목록에 제거됐습니다.',
+                  duration: Duration(milliseconds: 1000),
+                  snackPosition: SnackPosition.BOTTOM,
+                ),
+              );
               print("관심상품이벤트발생");
             },
             child: SvgPicture.asset(
