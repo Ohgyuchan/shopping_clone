@@ -1,4 +1,8 @@
-class ContentsRepository {
+import 'dart:convert';
+import 'package:shopping_clone/repository/local_storage_repository.dart';
+
+class ContentsRepository extends LocalStorageRepository {
+  final MY_FAVORITE_STORE_KEY = "MY_FAVORITE_STORE_KEY";
   Map<String, dynamic> data = {
     "ara": [
       {
@@ -175,5 +179,57 @@ class ContentsRepository {
       throw Exception("Data is Null");
     }
     return data[location];
+  }
+
+  Future<List?> loadFavoriteContents() async {
+    String? jsonString = await this.getStoredValue((MY_FAVORITE_STORE_KEY));
+    if (jsonString != null) {
+      List<dynamic> favoriteContentsList = jsonDecode(jsonString);
+      return favoriteContentsList;
+    } else {
+      return null;
+    }
+  }
+
+  addMyFavoriteContent(Map<String, String> content) async {
+    List? favoriteContentsList = await loadFavoriteContents();
+    if (favoriteContentsList == null || !(favoriteContentsList is List)) {
+      favoriteContentsList = [content];
+      updateFavoriteContent(favoriteContentsList);
+    } else {
+      favoriteContentsList.add(content);
+      updateFavoriteContent(favoriteContentsList);
+    }
+    print(favoriteContentsList);
+  }
+
+  isMyFavoriteContents(String cid) async {
+    bool _isMyFavoriteContents = false;
+    List? favoriteContentsList = await loadFavoriteContents();
+    if (favoriteContentsList == null || !(favoriteContentsList is List)) {
+      return false;
+    } else {
+      for (dynamic data in favoriteContentsList) {
+        if (data["cid"] == cid) {
+          _isMyFavoriteContents = true;
+          break;
+        }
+      }
+    }
+    print(favoriteContentsList);
+    return _isMyFavoriteContents;
+  }
+
+  deleteMyFavoriteContent(String cid) async {
+    List? favoriteContentsList = await loadFavoriteContents();
+    if (favoriteContentsList != null && favoriteContentsList is List) {
+      favoriteContentsList.removeWhere((element) => element['cid'] == cid);
+    }
+    updateFavoriteContent(favoriteContentsList!);
+    print(favoriteContentsList);
+  }
+
+  void updateFavoriteContent(List favoriteContentsList) {
+    this.storeValue(MY_FAVORITE_STORE_KEY, jsonEncode(favoriteContentsList));
   }
 }

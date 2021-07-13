@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shopping_clone/page/favorite.dart';
 import 'package:shopping_clone/page/home.dart';
-
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _AppState extends State<App> {
       case 3: // 채팅
         return Container();
       case 4: // 나의 당근
-        return Container();
+        return MyFavoriteContents();
     }
     return Container();
   }

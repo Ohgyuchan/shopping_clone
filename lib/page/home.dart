@@ -14,8 +14,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String currentLocation = 'ara';
-  ContentsRepository contentsRepository = ContentsRepository();
+  late String currentLocation;
+  late ContentsRepository contentsRepository;
 
   final Map<String, String> locationTypeToString = {
     'ara': '아라동',
@@ -26,6 +26,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    currentLocation = 'ara';
+  }
+
+  @override
+  void didChangeDependencies() {
+    contentsRepository = ContentsRepository();
+    super.didChangeDependencies();
   }
 
   @override

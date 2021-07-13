@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shopping_clone/components/manner_temperature.dart';
+import 'package:shopping_clone/repository/contents_repository.dart';
 import 'package:shopping_clone/utils/data_utils.dart';
 
 class DetailContentsView extends StatefulWidget {
@@ -15,6 +16,7 @@ class DetailContentsView extends StatefulWidget {
 
 class _DetailContentsViewState extends State<DetailContentsView>
     with SingleTickerProviderStateMixin {
+  late ContentsRepository contentsRepository;
   late Size size;
   List<String> imgList = [];
   late int _currentIndex;
@@ -22,11 +24,11 @@ class _DetailContentsViewState extends State<DetailContentsView>
   ScrollController _appBarScrollController = ScrollController();
   late AnimationController _appBarAnimationController;
   late Animation _colorTween;
-  late bool isMyFavoriteContent;
+  late bool _isMyFavoriteContent;
 
   @override
   void initState() {
-    isMyFavoriteContent = false;
+    _isMyFavoriteContent = false;
     _appBarAnimationController = AnimationController(vsync: this);
     _colorTween = ColorTween(
       begin: Colors.white,
@@ -41,7 +43,17 @@ class _DetailContentsViewState extends State<DetailContentsView>
         _appBarAnimationController.value = scrollPositionToAlpha / 255;
       });
     });
+    contentsRepository = ContentsRepository();
+    _loadMyFavoriteContentState();
     super.initState();
+  }
+
+  _loadMyFavoriteContentState() async {
+    bool checkIsMyFavorite =
+        await contentsRepository.isMyFavoriteContents("${widget.data["cid"]}");
+    setState(() {
+      _isMyFavoriteContent = checkIsMyFavorite;
+    });
   }
 
   @override
@@ -75,23 +87,27 @@ class _DetailContentsViewState extends State<DetailContentsView>
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
+              _isMyFavoriteContent
+                  ? await contentsRepository
+                      .deleteMyFavoriteContent("${widget.data['cid']}")
+                  : await contentsRepository.addMyFavoriteContent(widget.data);
               setState(() {
-                isMyFavoriteContent = !isMyFavoriteContent;
+                _isMyFavoriteContent = !_isMyFavoriteContent;
               });
               Get.showSnackbar(
                 GetBar(
-                  message: isMyFavoriteContent
+                  message: _isMyFavoriteContent
                       ? '관심상품 목록에 추가됐습니다.'
                       : '관심상품 목록에 제거됐습니다.',
                   duration: Duration(milliseconds: 1000),
-                  snackPosition: SnackPosition.BOTTOM,
+                  snackPosition: SnackPosition.TOP,
                 ),
               );
               print("관심상품이벤트발생");
             },
             child: SvgPicture.asset(
-              isMyFavoriteContent
+              _isMyFavoriteContent
                   ? "assets/svg/heart_on.svg"
                   : "assets/svg/heart_off.svg",
               width: 20,
