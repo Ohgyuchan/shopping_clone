@@ -22,9 +22,11 @@ class _DetailContentsViewState extends State<DetailContentsView>
   ScrollController _appBarScrollController = ScrollController();
   late AnimationController _appBarAnimationController;
   late Animation _colorTween;
+  late bool isMyFavoriteContent;
 
   @override
   void initState() {
+    isMyFavoriteContent = false;
     _appBarAnimationController = AnimationController(vsync: this);
     _colorTween = ColorTween(
       begin: Colors.white,
@@ -74,12 +76,18 @@ class _DetailContentsViewState extends State<DetailContentsView>
         children: [
           GestureDetector(
             onTap: () {
+              setState(() {
+                isMyFavoriteContent = !isMyFavoriteContent;
+              });
               print("관심상품이벤트발생");
             },
             child: SvgPicture.asset(
-              "assets/svg/heart_off.svg",
+              isMyFavoriteContent
+                  ? "assets/svg/heart_on.svg"
+                  : "assets/svg/heart_off.svg",
               width: 20,
               height: 20,
+              color: Color(0xfff08f4f),
             ),
           ),
           SizedBox(width: 15),
