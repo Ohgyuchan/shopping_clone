@@ -32,6 +32,7 @@ class _MyFavoriteContentsState extends State<MyFavoriteContents> {
 
   AppBar _appBarWidget() {
     return AppBar(
+      elevation: 1,
       title: Text(
         "관심목록",
         style: TextStyle(fontSize: 15),
@@ -50,14 +51,16 @@ class _MyFavoriteContentsState extends State<MyFavoriteContents> {
         } else if (snapshot.hasError) {
           if (snapshot.error.toString() == "Exception: Data is Null") {
             return Center(
-              child: Text('해당 지역에 데이터가 없습니다.'),
+              child: Text('해당 데이터가 없습니다.'),
             );
           }
           return Center(
             child: Text('데이터 오류'),
           );
         } else if (snapshot.hasData) {
-          return _makeDataList(snapshot.data as List<dynamic>);
+          return snapshot.data.isBlank == true
+              ? Center(child: Text('해당 데이터가 없습니다.'))
+              : _makeDataList(snapshot.data as List<dynamic>);
         }
 
         return Center(
