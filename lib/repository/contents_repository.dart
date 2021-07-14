@@ -195,10 +195,10 @@ class ContentsRepository extends LocalStorageRepository {
     List? favoriteContentsList = await loadFavoriteContents();
     if (favoriteContentsList == null || !(favoriteContentsList is List)) {
       favoriteContentsList = [content];
-      updateFavoriteContent(favoriteContentsList);
+      updateMyavoriteContent(favoriteContentsList);
     } else {
       favoriteContentsList.add(content);
-      updateFavoriteContent(favoriteContentsList);
+      updateMyavoriteContent(favoriteContentsList);
     }
     print(favoriteContentsList);
   }
@@ -229,7 +229,7 @@ class ContentsRepository extends LocalStorageRepository {
     print(favoriteContentsList);
   }
 
-  void updateFavoriteContent(List favoriteContentsList) {
+  void updateMyavoriteContent(List favoriteContentsList) {
     this.storeValue(MY_FAVORITE_STORE_KEY, jsonEncode(favoriteContentsList));
   }
 }
