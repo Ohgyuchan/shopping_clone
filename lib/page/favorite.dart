@@ -71,7 +71,7 @@ class _MyFavoriteContentsState extends State<MyFavoriteContents> {
   }
 
   Future<dynamic> _loadMyFavoriteContentsList() async {
-    return await contentsRepository.loadFavoriteContents();
+    return await contentsRepository.loadMyFavoriteContents();
   }
 
   _makeDataList(List<dynamic> data) {

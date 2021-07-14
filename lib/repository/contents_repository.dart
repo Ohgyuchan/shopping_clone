@@ -40,7 +40,7 @@ class ContentsRepository extends LocalStorageRepository {
       {
         "cid": "5",
         "image": "assets/images/ara-5.jpg",
-        "title": "디월트존기임팩",
+        "title": "디월트전기임팩",
         "location": "제주 제주시 아라동",
         "price": "150000",
         "likes": "2"
@@ -181,7 +181,7 @@ class ContentsRepository extends LocalStorageRepository {
     return data[location];
   }
 
-  Future<List?> loadFavoriteContents() async {
+  Future<List?> loadMyFavoriteContents() async {
     String? jsonString = await this.getStoredValue((MY_FAVORITE_STORE_KEY));
     if (jsonString != null) {
       List<dynamic> favoriteContentsList = jsonDecode(jsonString);
@@ -192,7 +192,7 @@ class ContentsRepository extends LocalStorageRepository {
   }
 
   addMyFavoriteContent(Map<String, String> content) async {
-    List? favoriteContentsList = await loadFavoriteContents();
+    List? favoriteContentsList = await loadMyFavoriteContents();
     if (favoriteContentsList == null || !(favoriteContentsList is List)) {
       favoriteContentsList = [content];
       updateMyFavoriteContent(favoriteContentsList);
@@ -205,7 +205,7 @@ class ContentsRepository extends LocalStorageRepository {
 
   isMyFavoriteContents(String cid) async {
     bool _isMyFavoriteContents = false;
-    List? favoriteContentsList = await loadFavoriteContents();
+    List? favoriteContentsList = await loadMyFavoriteContents();
     if (favoriteContentsList == null || !(favoriteContentsList is List)) {
       return false;
     } else {
@@ -221,7 +221,7 @@ class ContentsRepository extends LocalStorageRepository {
   }
 
   deleteMyFavoriteContent(String cid) async {
-    List? favoriteContentsList = await loadFavoriteContents();
+    List? favoriteContentsList = await loadMyFavoriteContents();
     if (favoriteContentsList != null && favoriteContentsList is List) {
       favoriteContentsList.removeWhere((element) => element['cid'] == cid);
     }
