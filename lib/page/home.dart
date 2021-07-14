@@ -165,7 +165,7 @@ class _HomeState extends State<Home> {
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            height: 100,
+            height: 110,
             child: Row(
               children: [
                 ClipRRect(
